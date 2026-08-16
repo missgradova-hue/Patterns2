@@ -109,3 +109,6 @@ public class AuthTest {
                 .shouldBe(visible);
     }
 }
+
+// x = 40 (мин.)
+// y = 400 (мин.)
