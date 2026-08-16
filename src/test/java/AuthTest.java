@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.Api;
 import ru.netology.data.DataGenerator;
+import org.openqa.selenium.chrome.ChromeOptions;
 import ru.netology.data.RegistrationUser;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -16,6 +17,14 @@ public class AuthTest {
     @BeforeAll
     static void setUp() {
         Configuration.browser = "chrome";
+        Configuration.headless = true;
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+
+        Configuration.browserCapabilities = options;
     }
 
     @Test
