@@ -93,7 +93,7 @@ public class AuthTest {
     void shouldNotLoginWithUnknownUser() {
         RegistrationUser user = DataGenerator.generateActiveUser();
 
-        // Специально НЕ регистрируем пользователя через API
+
 
         open("http://localhost:9999");
 
