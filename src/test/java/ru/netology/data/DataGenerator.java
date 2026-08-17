@@ -22,19 +22,12 @@ public class DataGenerator {
         return faker.internet().password();
     }
 
-    public static RegistrationUser generateActiveUser() {
+    public static RegistrationUser generateUser(String status) {
         return new RegistrationUser(
                 generateLogin(),
                 generatePassword(),
-                "active"
+                status
         );
     }
 
-    public static RegistrationUser generateBlockedUser() {
-        return new RegistrationUser(
-                generateLogin(),
-                generatePassword(),
-                "blocked"
-        );
-    }
 }

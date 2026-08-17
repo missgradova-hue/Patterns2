@@ -5,9 +5,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.Api;
 import ru.netology.data.DataGenerator;
-import org.openqa.selenium.chrome.ChromeOptions;
 import ru.netology.data.RegistrationUser;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverConditions.url;
@@ -17,21 +17,14 @@ public class AuthTest {
     @BeforeAll
     static void setUp() {
         Configuration.browser = "chrome";
-        Configuration.headless = true;
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-
-        Configuration.browserCapabilities = options;
     }
 
     @Test
     void shouldLoginWithActiveUser() {
-        RegistrationUser user = DataGenerator.generateActiveUser();
+        RegistrationUser user = DataGenerator.generateUser("active");
 
         Api.registerUser(user);
+
 
         open("http://localhost:9999");
 
@@ -45,13 +38,17 @@ public class AuthTest {
 
         webdriver()
                 .shouldHave(url("http://localhost:9999/dashboard"));
+        $("body")
+                .shouldBe(visible)
+                .shouldHave(text("Личный кабинет"));
     }
 
     @Test
     void shouldNotLoginWithBlockedUser() {
-        RegistrationUser user = DataGenerator.generateBlockedUser();
+        RegistrationUser user = DataGenerator.generateUser("blocked");
 
         Api.registerUser(user);
+
 
         open("http://localhost:9999");
 
@@ -64,12 +61,14 @@ public class AuthTest {
         $("[data-test-id='action-login']").click();
 
         $(".notification_status_error")
-                .shouldBe(visible);
+                .shouldBe(visible)
+                .shouldHave(text("Пользователь заблокирован"));
+
     }
 
     @Test
     void shouldNotLoginWithWrongPassword() {
-        RegistrationUser user = DataGenerator.generateActiveUser();
+        RegistrationUser user = DataGenerator.generateUser("active");
 
         Api.registerUser(user);
 
@@ -85,15 +84,15 @@ public class AuthTest {
 
         $("[data-test-id='action-login']").click();
 
+
         $(".notification_status_error")
-                .shouldBe(visible);
+                .shouldBe(visible)
+                .shouldHave(text("Ошибка! Неверно указан логин или пароль"));
     }
 
     @Test
     void shouldNotLoginWithUnknownUser() {
-        RegistrationUser user = DataGenerator.generateActiveUser();
-
-
+        RegistrationUser user = DataGenerator.generateUser("active");
 
         open("http://localhost:9999");
 
@@ -106,7 +105,8 @@ public class AuthTest {
         $("[data-test-id='action-login']").click();
 
         $(".notification_status_error")
-                .shouldBe(visible);
+                .shouldBe(visible)
+                .shouldHave(text("Ошибка! Неверно указан логин или пароль"));
     }
 }
 
