@@ -1,7 +1,6 @@
 package ru.netology;
 
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.Test;
 import ru.netology.data.Api;
 import ru.netology.data.DataGenerator;
@@ -14,10 +13,7 @@ import static com.codeborne.selenide.WebDriverConditions.url;
 
 public class AuthTest {
 
-    @BeforeAll
-    static void setUp() {
-        Configuration.browser = "chrome";
-    }
+
 
     @Test
     void shouldLoginWithActiveUser() {
@@ -38,7 +34,7 @@ public class AuthTest {
 
         webdriver()
                 .shouldHave(url("http://localhost:9999/dashboard"));
-        $("body")
+        $("h2.heading_size_l")
                 .shouldBe(visible)
                 .shouldHave(text("Личный кабинет"));
     }
@@ -58,8 +54,8 @@ public class AuthTest {
         $("[data-test-id='password'] input")
                 .setValue(user.getPassword());
 
-        $("[data-test-id='action-login']").click();
 
+        $("[data-test-id='action-login']").click();
         $(".notification_status_error")
                 .shouldBe(visible)
                 .shouldHave(text("Пользователь заблокирован"));
